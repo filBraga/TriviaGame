@@ -17,13 +17,13 @@ class Login extends React.Component {
   }
 
   onSubmitEmail() {
-    const { history, handleSendEmail, handleSendNome } = this.props;
+    const { handleSendEmail, handleSendNome } = this.props;
     const { email, name } = this.state;
     // console.log(history);
     handleSendEmail(email);
     handleSendNome(name);
 
-    history.push('/carteira');
+    // history.push('/carteira');
   }
 
   validInputs = () => {
@@ -96,7 +96,7 @@ const mapDispatchToProps = (dispatch) => ({
 Login.propTypes = {
   handleSendEmail: PropTypes.func.isRequired,
   handleSendNome: PropTypes.func.isRequired,
-  history: PropTypes.objectOf(PropTypes.any).isRequired,
+//   history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);
