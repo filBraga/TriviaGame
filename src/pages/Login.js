@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { setEmail, setUserName } from '../redux/actions';
+import { gettokenThunk, setUserName, setEmail } from '../actions';
 import logo from '../trivia.png';
 
 class Login extends React.Component {
@@ -13,17 +13,20 @@ class Login extends React.Component {
       buttomDisable: true,
     };
     this.handleChange = this.handleChange.bind(this);
-    this.onSubmitEmail = this.onSubmitEmail.bind(this);
   }
 
-  onSubmitEmail() {
-    const { handleSendEmail, handleSendNome } = this.props;
-    const { email, name } = this.state;
-    // console.log(history);
-    handleSendEmail(email);
-    handleSendNome(name);
+ onSubmitEmail = () => {
+   const { history, handleSendNome, getApiToken, handleSendEmail } = this.props;
+   const { name, email } = this.state;
+   getApiToken();
+   handleSendNome(name);
+   handleSendEmail(email);
+   history.push('/jogodomilhao');
+ }
 
-    // history.push('/carteira');
+  onSubmitConfig = () => {
+    const { history } = this.props;
+    history.push('/telaconfiguracao');
   }
 
   validInputs = () => {
@@ -47,7 +50,6 @@ class Login extends React.Component {
 
   render() {
     const { email, name, buttomDisable } = this.state;
-    //  console.log(disable);
     return (
       <div>
         <header className="App-header">
@@ -81,7 +83,14 @@ class Login extends React.Component {
           type="button"
           onClick={ this.onSubmitEmail }
         >
-          Entrar
+          Play
+        </button>
+        <button
+          data-testid="btn-settings"
+          type="button"
+          onClick={ this.onSubmitConfig }
+        >
+          Configurações do jogo
         </button>
       </div>
     );
@@ -89,14 +98,21 @@ class Login extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  handleSendEmail: (email) => dispatch(setEmail(email)),
+  getApiToken: () => dispatch(gettokenThunk()),
   handleSendNome: (nome) => dispatch(setUserName(nome)),
+  handleSendEmail: (email) => dispatch(setEmail(email)),
 });
 
+// const mapStateToProps = (state) => ({
+//   // console.log(state.wallet.currencies);
+//   token: state.tokenReducer.token,
+// });
+
 Login.propTypes = {
-  handleSendEmail: PropTypes.func.isRequired,
+  getApiToken: PropTypes.func.isRequired,
   handleSendNome: PropTypes.func.isRequired,
-//   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  handleSendEmail: PropTypes.func.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);
