@@ -1,5 +1,5 @@
 // Esse reducer será responsável por tratar as informações da pessoa usuária
-import { ADD_USER_NAME_TYPE, ADD_EMAIL_TYPE } from '../actions/index';
+import { ADD_USER_NAME_TYPE, ADD_EMAIL_TYPE, GET_SCORE_TYPE } from '../actions/index';
 
 const INITIAL_STATE = {
   name: '',
@@ -21,6 +21,12 @@ const userReducer = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       name: action.payload,
+    };
+  case GET_SCORE_TYPE:
+    // console.log('chegou');
+    return {
+      ...state,
+      score: action.payload,
     };
   default:
     return state;

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getQuestionAPI, getToken } from '../services/api';
-import { gettokenThunk } from '../actions';
+import { gettokenThunk, setScore } from '../actions';
 
 class Questions extends React.Component {
   constructor() {
@@ -21,6 +21,7 @@ class Questions extends React.Component {
   componentDidMount() {
     this.getApi();
     const MAGIC_NUMBER_TIME = 1000;
+    // parte da logica retirada de http://www.desafiosdeti.com.br/sem-categoria/introducao-react-js-criando-um-cronometro/
     this.timer = setInterval(
       () => this.timeQuestions(), MAGIC_NUMBER_TIME,
     );
@@ -59,11 +60,36 @@ class Questions extends React.Component {
   }
 
   onSubmitAnswers = (answerCorrect, myAnswer) => {
+    const { results, time } = this.state;
+    const { handleSendScore } = this.props;
+    const MAGIC_NUMBER_SCORE = 10;
+    const MAGIC_NUMBER_EASY = 1;
+    const MAGIC_NUMBER_MEDIUM = 2;
+    const MAGIC_NUMBER_HARD = 3;
     if (answerCorrect !== myAnswer) {
-      this.setState({ colorRed: 'incorrect-button', colorGreen: 'correct-button' });
+      this.setState({ colorRed: 'incorrect-button',
+        colorGreen: 'correct-button',
+        disabled: true });
     }
     if (answerCorrect === myAnswer) {
-      this.setState({ colorGreen: 'correct-button', colorRed: 'incorrect-button' });
+      this.setState({ colorGreen: 'correct-button',
+        colorRed: 'incorrect-button',
+        disabled: true });
+      if (results.difficulty === 'easy') {
+        const scoreParcial = MAGIC_NUMBER_SCORE + (time * MAGIC_NUMBER_EASY);
+        handleSendScore(scoreParcial);
+        localStorage.setItem('score', scoreParcial);
+      }
+      if (results.difficulty === 'medium') {
+        const scoreParcial = MAGIC_NUMBER_SCORE + (time * MAGIC_NUMBER_MEDIUM);
+        handleSendScore(scoreParcial);
+        localStorage.setItem('score', scoreParcial);
+      }
+      if (results.difficulty === 'hard') {
+        const scoreParcial = MAGIC_NUMBER_SCORE + (time * MAGIC_NUMBER_HARD);
+        handleSendScore(scoreParcial);
+        localStorage.setItem('score', scoreParcial);
+      }
     }
   }
 
@@ -118,11 +144,13 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getApiToken: (payload) => dispatch(gettokenThunk(payload)),
+  handleSendScore: (score) => dispatch(setScore(score)),
 });
 
 Questions.propTypes = {
   token: PropTypes.string.isRequired,
   getApiToken: PropTypes.func.isRequired,
+  handleSendScore: PropTypes.func.isRequired,
 //   history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
