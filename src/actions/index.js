@@ -1,28 +1,24 @@
-import tokenAPI from '../services/tokenAPI';
-
 export const ADD_EMAIL_TYPE = 'ADD_EMAIL';
 export const ADD_USER_NAME_TYPE = 'ADD_USER_NAME';
 export const GET_LOCATION_SUCCESS_TYPE = 'GET_LOCATION_SUCCESS';
 export const GET_LOCATION_FAIL_TYPE = 'GET_LOCATION_FAIL';
 
-export const getGravatarSuccess = (payload) => ({
+export const getSuccess = (payload) => ({
   type: GET_LOCATION_SUCCESS_TYPE,
   payload,
 });
 
-export const getLocationFail = () => ({
+export const getFail = () => ({
   type: GET_LOCATION_FAIL_TYPE,
 });
 
-export const gettokenThunk = () => async (dispatch) => {
+export const gettokenThunk = (payload) => (dispatch) => {
   // console.log(email);
   try {
-    const location = await tokenAPI();
-    // console.log(location);
-    dispatch(getGravatarSuccess(location));
+    dispatch(getSuccess(payload));
   } catch (error) {
     console.log('Erro');
-    dispatch(getLocationFail());
+    dispatch(getFail());
   }
 };
 

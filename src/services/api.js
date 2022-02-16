@@ -1,4 +1,4 @@
-const getGravatar = async () => {
+export async function getToken() {
   const response = await fetch('https://opentdb.com/api_token.php?command=request');
   //  console.log(response);
   const location = await response.json();
@@ -7,6 +7,10 @@ const getGravatar = async () => {
   // // console.log(url);
   localStorage.setItem('token', location.token);
   return location.token;
-};
+}
 
-export default getGravatar;
+export async function getQuestionAPI(token) {
+  const response = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
+  const location = await response.json();
+  return location;
+}
