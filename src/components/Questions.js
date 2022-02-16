@@ -11,11 +11,19 @@ class Questions extends React.Component {
       results: [],
       index: 0,
       answer: [],
+      colorGreen: '',
+      colorRed: '',
+      time: 30,
+      disabled: false,
     };
   }
 
   componentDidMount() {
     this.getApi();
+    const MAGIC_NUMBER_TIME = 1000;
+    this.timer = setInterval(
+      () => this.timeQuestions(), MAGIC_NUMBER_TIME,
+    );
   }
 
   getApi = async () => {
@@ -50,10 +58,29 @@ class Questions extends React.Component {
     }
   }
 
+  onSubmitAnswers = (answerCorrect, myAnswer) => {
+    if (answerCorrect !== myAnswer) {
+      this.setState({ colorRed: 'incorrect-button', colorGreen: 'correct-button' });
+    }
+    if (answerCorrect === myAnswer) {
+      this.setState({ colorGreen: 'correct-button', colorRed: 'incorrect-button' });
+    }
+  }
+
+  timeQuestions = () => {
+    const { time } = this.state;
+    if (time > 0) {
+      this.setState({ time: time - 1 });
+    }
+    if (time === 0) {
+      this.setState({ disabled: true, time: 0 });
+    }
+  }
+
   render() {
-    const { answer, results } = this.state;
+    const { answer, results, colorGreen, colorRed, time, disabled } = this.state;
     // console.log(results);
-    // console.log(questions);
+    // console.log(color);
     if (results === undefined) return null;
     return (
       <div>
@@ -70,11 +97,15 @@ class Questions extends React.Component {
                   : `wrong-answer-${index}` }
                 key={ index }
                 type="button"
+                disabled={ disabled }
+                className={ answers === results.correct_answer ? colorGreen : colorRed }
+                onClick={ () => this.onSubmitAnswers(results.correct_answer, answers) }
               >
                 {answers}
               </button>
             )) : null}
         </div>
+        {time}
       </div>
     );
   }
