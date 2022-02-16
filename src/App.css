@@ -43,10 +43,10 @@
 }
 
 .avatarImage {
-  vertical-align: middle;
-  height: 50px;
-  width: 50px;
   border-radius: 50%;
+  height: 50px;
+  vertical-align: middle;
+  width: 50px;
 }
 
 .App-link {
