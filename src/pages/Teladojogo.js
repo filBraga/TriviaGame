@@ -1,18 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import Questions from '../components/Questions';
 
 class Teladojogo extends React.Component {
-  // componentDidUpdate () {
-  //     const {token} = this.props;
-  //     localStorage.setItem('token', JSON.stringify(token));
-  //     console.log(token);
-  // }
+  constructor() {
+    super();
+    this.state = {};
+  }
+
   render() {
+    // console.log(questions);
     return (
       <div>
         <Header />
         <h1>Tela do jogo</h1>
+        <Questions />
       </div>
     );
   }
@@ -20,19 +23,16 @@ class Teladojogo extends React.Component {
 
 // const mapStateToProps = (state) => ({
 //   // console.log(state.wallet.currencies);
-//   token: state.token.token,
+//   token: state.token,
 // });
 
 // const mapDispatchToProps = (dispatch) => ({
-//   handleSendNome: (nome) => dispatch(setUserName(nome)),
-//   getApiGravatar: (email) => dispatch(getGravatarThunk(email)),
-//   handleSendEmail: (email) => dispatch(setEmail(email)),
+//   getApiToken: (payload) => dispatch(gettokenThunk(payload)),
 // });
 
-// Login.propTypes = {
-//   getApiGravatar: PropTypes.func.isRequired,
-//   handleSendNome: PropTypes.func.isRequired,
-//   handleSendEmail: PropTypes.func.isRequired,
+// Teladojogo.propTypes = {
+//   token: PropTypes.string.isRequired,
+//   getApiToken: PropTypes.func.isRequired,
 // //   history: PropTypes.objectOf(PropTypes.any).isRequired,
 // };
 

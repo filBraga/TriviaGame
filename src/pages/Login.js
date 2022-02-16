@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { getToken } from '../services/api';
 import { gettokenThunk, setUserName, setEmail } from '../actions';
 import logo from '../trivia.png';
 
@@ -15,10 +16,11 @@ class Login extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
- onSubmitEmail = () => {
+ onSubmitEmail = async () => {
    const { history, handleSendNome, getApiToken, handleSendEmail } = this.props;
    const { name, email } = this.state;
-   getApiToken();
+   const tokenAPi = await getToken();
+   getApiToken(tokenAPi);
    handleSendNome(name);
    handleSendEmail(email);
    history.push('/jogodomilhao');
@@ -98,7 +100,7 @@ class Login extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getApiToken: () => dispatch(gettokenThunk()),
+  getApiToken: (payload) => dispatch(gettokenThunk(payload)),
   handleSendNome: (nome) => dispatch(setUserName(nome)),
   handleSendEmail: (email) => dispatch(setEmail(email)),
 });
