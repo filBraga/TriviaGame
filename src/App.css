@@ -43,6 +43,8 @@
 }
 
 .avatarImage {
+  border-radius: 50%;
+  height: 50px;
   vertical-align: middle;
   height: 50px;
   width: 50px;

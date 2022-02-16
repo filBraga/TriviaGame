@@ -30,7 +30,7 @@ class Header extends React.Component {
           </div>
           <div>
             <h4 data-testid="header-player-name">
-              Player Name
+              Player Name :
               { name }
             </h4>
           </div>
@@ -54,8 +54,8 @@ const mapStateToProps = (state) => ({
 });
 
 Header.propTypes = {
-  name: PropTypes.objectOf(PropTypes.string).isRequired,
-  score: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  score: PropTypes.string.isRequired,
   gravatarEmail: PropTypes.string.isRequired,
 };
 
