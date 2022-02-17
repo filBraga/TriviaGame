@@ -29,6 +29,10 @@ class Questions extends React.Component {
     );
   }
 
+  // componentWillUnmount() {
+  //   this.onSubmitNext();
+  // }
+
   getApi = async () => {
     const { token, getApiToken } = this.props;
     const { index } = this.state;
