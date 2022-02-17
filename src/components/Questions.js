@@ -103,6 +103,10 @@ class Questions extends React.Component {
     }
   }
 
+  setTimeZero = () => {
+    this.setState({ time: 1 });
+  }
+
   render() {
     const { answer, results, colorGreen, colorRed, time, disabled } = this.state;
     // console.log(results);
@@ -132,6 +136,9 @@ class Questions extends React.Component {
             )) : null}
         </div>
         {time}
+        <button onClick={ this.setTimeZero } type="button" data-testid="btn-next">
+          Next
+        </button>
       </div>
     );
   }
