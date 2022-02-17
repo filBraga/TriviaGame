@@ -4,7 +4,7 @@ import { ADD_USER_NAME_TYPE, ADD_EMAIL_TYPE, GET_SCORE_TYPE } from '../actions/i
 const INITIAL_STATE = {
   name: '',
   assertions: '',
-  score: '',
+  score: 0,
   gravatarEmail: '',
 };
 
