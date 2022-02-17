@@ -56,7 +56,7 @@ class Questions extends React.Component {
       const answerCorrect = results.correct_answer;
       const answerIncorrect = results.incorrect_answers;
       const answernTotal = [...answerIncorrect, answerCorrect];
-      // console.log(questionTotal);
+      // console.log(questionotal);
       // logica abaixo retirada de https://pt.stackoverflow.com/questions/466033/estou-querendo-gerar-4-valores-aleat%C3%B3rios-de-uma-array-como-posso-fazer
       const answernMisturado = answernTotal.slice()
         .sort(() => MAGIC_NUMBER - Math.random());
