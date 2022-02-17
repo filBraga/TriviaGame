@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import Questions from '../components/Questions';
 
@@ -11,11 +12,12 @@ class Teladojogo extends React.Component {
 
   render() {
     // console.log(questions);
+    const { history } = this.props;
     return (
       <div>
         <Header />
         <h1>Tela do jogo</h1>
-        <Questions />
+        <Questions history={ history } />
       </div>
     );
   }
@@ -30,10 +32,8 @@ class Teladojogo extends React.Component {
 //   getApiToken: (payload) => dispatch(gettokenThunk(payload)),
 // });
 
-// Teladojogo.propTypes = {
-//   token: PropTypes.string.isRequired,
-//   getApiToken: PropTypes.func.isRequired,
-// //   history: PropTypes.objectOf(PropTypes.any).isRequired,
-// };
+Teladojogo.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+};
 
 export default connect()(Teladojogo);
