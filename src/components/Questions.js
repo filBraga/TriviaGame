@@ -4,18 +4,20 @@ import PropTypes from 'prop-types';
 import { getQuestionAPI, getToken } from '../services/api';
 import { gettokenThunk, setScore } from '../actions';
 
+const initialState = {
+  results: [],
+  index: 0,
+  answer: [],
+  colorGreen: '',
+  colorRed: '',
+  time: 30,
+  disabled: false,
+  buttomVisible: 'buttonNextHiden',
+};
 class Questions extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      results: [],
-      index: 0,
-      answer: [],
-      colorGreen: '',
-      colorRed: '',
-      time: 30,
-      disabled: false,
-    };
+  constructor(props) {
+    super(props);
+    this.state = initialState;
   }
 
   componentDidMount() {
@@ -27,12 +29,16 @@ class Questions extends React.Component {
     );
   }
 
+  // componentWillUnmount() {
+  //   this.onSubmitNext();
+  // }
+
   getApi = async () => {
     const { token, getApiToken } = this.props;
     const { index } = this.state;
     const apiQuestion = await getQuestionAPI(token);
     const NUMBER_FAIL = 3;
-    // console.log(teste);
+    // console.log(apiQuestion);
     if (apiQuestion.response_code === NUMBER_FAIL) {
       const newToken = await getToken();
       // console.log(newToken);
@@ -69,12 +75,14 @@ class Questions extends React.Component {
     if (answerCorrect !== myAnswer) {
       this.setState({ colorRed: 'incorrect-button',
         colorGreen: 'correct-button',
-        disabled: true });
+        disabled: true,
+        buttomVisible: 'buttonNext' });
     }
     if (answerCorrect === myAnswer) {
       this.setState({ colorGreen: 'correct-button',
         colorRed: 'incorrect-button',
-        disabled: true });
+        disabled: true,
+        buttomVisible: 'buttonNext' });
       if (results.difficulty === 'easy') {
         const scoreParcial = MAGIC_NUMBER_SCORE + (time * MAGIC_NUMBER_EASY);
         handleSendScore(scoreParcial);
@@ -99,13 +107,30 @@ class Questions extends React.Component {
       this.setState({ time: time - 1 });
     }
     if (time === 0) {
-      this.setState({ disabled: true, time: 0 });
+      this.setState({ disabled: true,
+        time: 0,
+        buttomVisible: 'buttonNext' });
+    }
+  }
+
+  onSubmitNext = () => {
+    const { index } = this.state;
+    // console.log(results);
+    const MAGIC_NUMBER_NEXT = 4;
+    if (index < MAGIC_NUMBER_NEXT) {
+      this.setState(initialState);
+      this.setState({ index: index + 1 });
+      this.getApi();
+    }
+    if (index >= MAGIC_NUMBER_NEXT) {
+      const { history } = this.props;
+      history.push('/feedback');
     }
   }
 
   render() {
-    const { answer, results, colorGreen, colorRed, time, disabled } = this.state;
-    // console.log(results);
+    const { answer, results, colorGreen, colorRed, time,
+      buttomVisible, disabled } = this.state;
     // console.log(color);
     if (results === undefined) return null;
     return (
@@ -117,11 +142,11 @@ class Questions extends React.Component {
             {questions.correct_answer}
           </button> */}
           {answer !== [] ? answer
-            .map((answers, index) => (
+            .map((answers, index1) => (
               <button
                 data-testid={ answers === results.correct_answer ? 'correct-answer'
-                  : `wrong-answer-${index}` }
-                key={ index }
+                  : `wrong-answer-${index1}` }
+                key={ index1 }
                 type="button"
                 disabled={ disabled }
                 className={ answers === results.correct_answer ? colorGreen : colorRed }
@@ -131,7 +156,15 @@ class Questions extends React.Component {
               </button>
             )) : null}
         </div>
-        {time}
+        <span>{`Tempo para a resposta : ${time}`}</span>
+        <button
+          data-testid="btn-next"
+          type="button"
+          onClick={ this.onSubmitNext }
+          className={ buttomVisible }
+        >
+          Next
+        </button>
       </div>
     );
   }
@@ -151,7 +184,7 @@ Questions.propTypes = {
   token: PropTypes.string.isRequired,
   getApiToken: PropTypes.func.isRequired,
   handleSendScore: PropTypes.func.isRequired,
-//   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Questions);
