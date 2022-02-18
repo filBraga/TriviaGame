@@ -3,6 +3,7 @@ export const ADD_USER_NAME_TYPE = 'ADD_USER_NAME';
 export const GET_LOCATION_SUCCESS_TYPE = 'GET_LOCATION_SUCCESS';
 export const GET_LOCATION_FAIL_TYPE = 'GET_LOCATION_FAIL';
 export const GET_SCORE_TYPE = 'GET_SCORE';
+export const GET_ASSERTION_TYPE = 'GET_ASSERTION';
 
 export const getSuccess = (payload) => ({
   type: GET_LOCATION_SUCCESS_TYPE,
@@ -35,5 +36,10 @@ export const setEmail = (payload) => ({
 
 export const setScore = (payload) => ({
   type: GET_SCORE_TYPE,
+  payload,
+});
+
+export const setAssertion = (payload) => ({
+  type: GET_ASSERTION_TYPE,
   payload,
 });

@@ -36,8 +36,7 @@ class Header extends React.Component {
           </div>
           <div>
             <h4 data-testid="header-score">
-              Score:
-              { score || '0' }
+              { score }
             </h4>
             {/* <Link to="/search" data-testid="link-to-search">Search </Link> */}
           </div>

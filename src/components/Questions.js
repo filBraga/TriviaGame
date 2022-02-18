@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getQuestionAPI, getToken } from '../services/api';
-import { gettokenThunk, setScore } from '../actions';
+import { gettokenThunk, setScore, setAssertion } from '../actions';
 
 const initialState = {
   results: [],
@@ -67,7 +67,7 @@ class Questions extends React.Component {
 
   onSubmitAnswers = (answerCorrect, myAnswer) => {
     const { results, time } = this.state;
-    const { handleSendScore } = this.props;
+    const { handleSendScore, handleSendAssertion, assertions } = this.props;
     const MAGIC_NUMBER_SCORE = 10;
     const MAGIC_NUMBER_EASY = 1;
     const MAGIC_NUMBER_MEDIUM = 2;
@@ -76,13 +76,17 @@ class Questions extends React.Component {
       this.setState({ colorRed: 'incorrect-button',
         colorGreen: 'correct-button',
         disabled: true,
-        buttomVisible: 'buttonNext' });
+        buttomVisible: 'buttonNext',
+      });
     }
     if (answerCorrect === myAnswer) {
       this.setState({ colorGreen: 'correct-button',
         colorRed: 'incorrect-button',
         disabled: true,
-        buttomVisible: 'buttonNext' });
+        buttomVisible: 'buttonNext',
+      });
+      const assertionParcial = assertions + 1;
+      handleSendAssertion(assertionParcial);
       if (results.difficulty === 'easy') {
         const scoreParcial = MAGIC_NUMBER_SCORE + (time * MAGIC_NUMBER_EASY);
         handleSendScore(scoreParcial);
@@ -156,8 +160,13 @@ class Questions extends React.Component {
               </button>
             )) : null}
         </div>
-        {time}
-        <button onClick={ this.setTimeZero } type="button" data-testid="btn-next">
+        <span>{`Tempo para a resposta : ${time}`}</span>
+        <button
+          data-testid="btn-next"
+          type="button"
+          onClick={ this.onSubmitNext }
+          className={ buttomVisible }
+        >
           Next
         </button>
       </div>
@@ -168,17 +177,21 @@ class Questions extends React.Component {
 const mapStateToProps = (state) => ({
   // console.log(state.wallet.currencies);
   token: state.token,
+  assertions: state.player.assertions,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getApiToken: (payload) => dispatch(gettokenThunk(payload)),
   handleSendScore: (score) => dispatch(setScore(score)),
+  handleSendAssertion: (assertion) => dispatch(setAssertion(assertion)),
 });
 
 Questions.propTypes = {
   token: PropTypes.string.isRequired,
+  assertions: PropTypes.number.isRequired,
   getApiToken: PropTypes.func.isRequired,
   handleSendScore: PropTypes.func.isRequired,
+  handleSendAssertion: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
